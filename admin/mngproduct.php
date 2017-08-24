@@ -1,10 +1,8 @@
 <?php include('header.php'); ?>
-<?php 
-			$page=basename($_SERVER['PHP_SELF']);
-		?>
+<?php $page=basename($_SERVER['PHP_SELF']); ?>
 		
 		<?php include('sidebar.php'); ?>
-		
+
 		
 		<div id="main-content"> <!-- Main Content Section with everything -->
 			
@@ -30,13 +28,13 @@
 
 
 
-			
+		
 
 			<div class="content-box">
 
 				<div class="content-box-header">
 					
-					<h3>Product</h3>					
+					<h3>Manage Product</h3>					
 					
 				</div> <!-- End .content-box-header -->
 
@@ -207,7 +205,7 @@
 					
 
 
-			
+	
 			
 			
 			
