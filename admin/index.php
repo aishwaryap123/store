@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php include('header.php'); ?>
 <?php 
 			$page=basename($_SERVER['PHP_SELF']);
@@ -220,3 +221,6 @@
 			
 			
 			<?php include('footer.php'); ?>
+=======
+hello my name is cedcoss
+>>>>>>> 0cc298f86cf3bed9f761b62e14f204278f71618f
