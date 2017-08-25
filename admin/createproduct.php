@@ -3,6 +3,13 @@
 		<?php include('sidebar.php'); ?>
 		<?php
 			include "config.php";
+			$tag="";
+		    if(isset($_POST['tag1'])){
+		    	$tag=$_POST['tag1'];
+		    }
+		    else if(isset($_POST['tag2'])){
+		    	$tag=$_POST['tag2'];
+		    }
 			if(isset($_POST['submit'])){
 			
 			$name=$_POST['product-name'];
@@ -24,6 +31,7 @@
 										$img=$image1;
 									}
 		}
+
 		if(isset($_POST['edit'])){
 			$postId=$_POST['edit'];
 			$postName=$_POST['product-name'];
@@ -46,8 +54,8 @@
 			}
 
 		}
-		$stmt=$conn->prepare("INSERT INTO PRODUCT (name,price,image,category) values (?,?,?,?)");
-				$stmt->bind_param("ssss",$name,$price,$image,$category);
+		$stmt=$conn->prepare("INSERT INTO PRODUCT (name,price,image,category,tags) values (?,?,?,?,?)");
+				$stmt->bind_param("sssss",$name,$price,$image,$category,$tag);
 					$stmt->execute();
 						$stmt->close();
 
@@ -106,13 +114,16 @@
 										<option name="option0" value="option0">Category</option>
 										<option name="option1" value="Sports">Sports</option>
 										<option  name="option2" value="Electronics">Elctronics</option>
+										<option  name="option3" value="Automobiles">Automobiles</option>
+										<option  name="option4" value="Luxury">Luxury</option>
 										
 									</select> 
 								</p>
 								
 								<p>
-									<label>Textarea with WYSIWYG</label>
-									<textarea class="text-input textarea wysiwyg" id="textarea" name="textfield" cols="79" rows="15"></textarea>
+									<label>Product Tags</label>
+									<input type="checkbox" value="brittle" class="tags" name="tag1">Brittle</input>
+									<input type="checkbox" value="fragile" class="tags" name="tag2">Fragile</input> 
 								</p>
 								
 								<p>
