@@ -16,22 +16,21 @@
 			$price=$_POST['product-price'];
 			$category=$_POST['dropdown'];
 			$image="";
-
 		}
 		if(isset($_GET['e_id'])){
 			$edt_id=$_GET['e_id'];
 			$stmt=$conn->prepare("SELECT * FROM  PRODUCT WHERE id=?");
 			$stmt->bind_param("i",$edt_id);
-			$stmt->bind_result($id1,$name1,$price1,$image1,$category1);
+			$stmt->bind_result($id1,$name1,$price1,$image1,$category1,$tag1);
 			$stmt->execute();
 			                    while($stmt->fetch()){
 										$i=$id1;
 										$n=$name1;
 										$p=$price1;
 										$img=$image1;
+										$tag_edit=$tag1;
 									}
 		}
-
 		if(isset($_POST['edit'])){
 			$postId=$_POST['edit'];
 			$postName=$_POST['product-name'];
@@ -52,13 +51,11 @@
 								$image=$filename;
 			 }
 			}
-
 		}
 		$stmt=$conn->prepare("INSERT INTO PRODUCT (name,price,image,category,tags) values (?,?,?,?,?)");
 				$stmt->bind_param("sssss",$name,$price,$image,$category,$tag);
 					$stmt->execute();
 						$stmt->close();
-
 		?>
 
 			
@@ -141,39 +138,3 @@
 						</form>
 						
 					</div> <!-- End #tab2 -->   
-
-
-
-
-
-
-
-
-
-			
-
-			
-				</div>
-			
-
-
-
-			
-			
-					
-					
-
-
-			
-			
-			
-			
-			
-			<div class="clear"></div>
-			
-			
-			
-			
-			
-			
-			<?php include('footer.php'); ?>
