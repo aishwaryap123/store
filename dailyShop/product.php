@@ -1,93 +1,45 @@
   
   <?php include ("productheader.php"); ?>
   <?php include ("../config.php"); ?> 
+  <?php include ("../functions.php");?>
   <!-- menu -->
   <?php include ("menu.php");?>
   <?php 
-  
-      
- 
-      //to show product of selected category...
-       $products=array();
-      $rec_limit=9;
-      //count total # of products
-      $stmt=$conn->prepare("SELECT count(id) FROM PRODUCT");
-      $stmt->bind_result($count);
-      $stmt->execute();
-        while($stmt->fetch()){
-          $total_record=$count;
+   
+    $rec_limit=9;
+    //count total # of products
+      $total_record=countProduct();
+         $offset=0;
+           $product_per_page=ceil($total_record/$rec_limit);
+            if(isset($_GET['pg'])){
+              $pg=$_GET['pg'];
+            
+                for ($i=1; $i <= $product_per_page ; $i++) {
 
-        }
+                  if($pg==$i){
 
-        
-        $offset=0;
-        $product_per_page=ceil($total_record/$rec_limit);
-        if(isset($_GET['pg'])){
-            $pg=$_GET['pg'];
-            //$offset=$pg*$rec_limit;
-            for ($i=1; $i <= $product_per_page ; $i++) {
-
-                if($pg==$i){
-
-                   $offset= ($i-1)*$rec_limit;
+                    $offset= ($i-1)*$rec_limit;
                     
                    }
-
-          
                  }
-
-     
                }
-          //to show multiple category wise.......
-            if(isset($_POST['submit'])){
+                //to show multiple category wise.......
+                  if(isset($_POST['submit'])){
 
-              if(!empty($_POST['param'])){
-                  $check_array=$_POST['param'];
-                 // print_r($check_array);
-                     $cat_products=array();
-                     
-                  foreach($check_array as $key){
-                 
-                    $stmt=$conn->prepare("SELECT * FROM PRODUCT WHERE category=?");
-                    $stmt->bind_param("s",$key);
-                    $stmt->execute();
-                     $stmt->bind_result($ro_id,$ro_name,$ro_price,$ro_image,$ro_cat,$ro_tag);
-                    
-                   
-                    while($stmt->fetch()){
-                      array_push($cat_products,array('id'=>$ro_id,'name'=>$ro_name,'price'=>$ro_price,'image'=>$ro_image,'category'=>$ro_cat,'tags'=>$ro_tag));
-                    }
+                    if(!empty($_POST['param'])){
+                      $check_array=$_POST['param'];
 
-                      array_slice($cat_products,$offset,$rec_limit);      
-
-                   }
-                  
-                }
-              }
-                
-          //to show all products with pagination.....
-         
-          $stmt= $conn->prepare("SELECT * FROM PRODUCT LIMIT ?,?");
-          $stmt->bind_param("ii",$offset,$rec_limit);
-          $stmt->execute();
-            $stmt->bind_result($r_id,$r_name,$r_price,$r_image,$r_cat,$r_tag);
-              while($stmt->fetch()){
-                array_push($products,array('id'=>$r_id,'name'=>$r_name,'price'=>$r_price,'image'=>$r_image,'category'=>$r_cat,'tags'=>$r_tag));
-                  }
-                  //to select all category....
-                  $ctg=array();
-                    $stmt=$conn->prepare("SELECT cat_name FROM Category");
-                    $stmt->bind_result($c_name);
-                    $stmt->execute();
-                    while($stmt->fetch()){
-                      array_push($ctg,array('name'=>$c_name));
-                    }
-                    $stmt->close();
-     
-      
-      
+                        $cat_products=showMultipleCategory($check_array);
+                         array_slice($cat_products,$offset,$rec_limit);
+                       }
+                     }
+                     //to show all products with pagination.....
+                        $products=showPagination($offset,$rec_limit);
+                        //to select all category....
+                           $ctg=array();
+                              $ctg=showCategory();
   ?>
- 
+  
   <!-- catg header banner section -->
   <section id="aa-catg-head-banner">
    <img src="img/fashion/fashion-header-bg-8.jpg" alt="fashion img">
@@ -453,3 +405,42 @@
   <!-- / Subscribe section -->
 
 <?php include ("productfooter.php"); ?>
+
+
+
+ 
+                 
+                  
+                         
+                         
+
+
+                        
+
+                   
+                
+           
+
+         
+         
+                    
+      
+                    
+                  
+
+                   
+              
+
+          
+      
+ 
+
+      
+      
+
+        
+       
+         
+                
+
+  
