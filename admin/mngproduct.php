@@ -1,22 +1,22 @@
 <?php include('header.php'); ?>
+<?php	include ("../config.php"); ?>
+<?php	include ("../functions.php"); ?>
 <?php $page=basename($_SERVER['PHP_SELF']); ?>
 		
 		<?php include('sidebar.php'); ?>
 		<?php
-		$products=array();
-		include "config.php";
+		//$products=array();
+	
 		//insertion with pagitation....
-		$stmt=$conn->prepare("SELECT count(id) FROM PRODUCT");
-			$stmt->bind_result($count);
-			$stmt->execute();
-				while($stmt->fetch()){
-					$total_record=$count;
-				}
+		
+				
+					$total_record=countProduct();
+				
 				$rec_limit=3;
-				$product_per_page=($total_record/$rec_limit);
+				$product_per_page=ceil($total_record/$rec_limit);
 					if(isset($_GET['pg'])){
 						$pg=$_GET['pg'];
-						//$offset=$pg*$rec_limit;
+				
 						for ($i=1; $i <= $product_per_page ; $i++) {
 
        					if($pg==$i){
@@ -26,18 +26,11 @@
    				 }
 
 					
-					}
+			}
 
-         			//$left_rec = $total_record - ($pg * $rec_limit);
-
-				    	$stmt= $conn->prepare("SELECT * FROM PRODUCT LIMIT ?,?");
-				    $stmt->bind_param("ii",$offset,$rec_limit);
-						$stmt->execute();
-							$stmt->bind_result($r_id,$r_name,$r_price,$r_image,$r_cat,$r_tag);
-								while($stmt->fetch()){
-									array_push($products,array('id'=>$r_id,'name'=>$r_name,'price'=>$r_price,'image'=>$r_image,'category'=>$r_cat,'tags'=>$r_tag));
-								}
-		
+    
+ 			$products=showPagination($offset,$rec_limit);
+         				
 		
 				
 								
@@ -111,7 +104,7 @@
 									<div class="pagination">
 									
 					<?php for($i=1;$i<=$product_per_page;$i++) { ?>	
-							<a href="mngproduct.php?pg=<?php echo $i;?>" 
+						<a href="mngproduct.php?pg=<?php echo $i;?>" 
 							<?php if(isset($pg)&&$pg==$i): ?>
 					class='number current' title='1' <?php endif; ?>>
 						   <?php echo $i;?></a>"

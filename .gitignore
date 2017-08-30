@@ -1,2 +1,6 @@
 uploads/*
-admin/config.php
+config.php
+dailyShop/.sass-cache/*
+dailyShop/product.html
+admin/.cache
+admin/resources

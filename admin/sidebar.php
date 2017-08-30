@@ -20,20 +20,49 @@
 					</a>       
 				</li>
 				
-				<li> 
-				<?php if($page=="index.php" ||$page="createcategory.php"||$page="mngcategory.php"):?>
-					<a href="#" class="nav-top-item " > <!-- Add the class "current" to current menu item -->
-					Products
-					</a>
-					<ul>
-					<li><a  href="createproduct.php">Create Products </a></li>
-					<li><a   href="mngproduct.php">Manage Products</a></li>
-					</ul>
-					
-				<?php endif; ?>
-				</li>
+				<li>
 
-			
+
+                <?php if($page=='index.php' || $page=='addcategory.php' || $page=='mngcategory.php'):?>
+                    <a href="#" class="nav-top-item"> <!-- Add the class "current" to current menu item -->
+                    Products
+                    </a>
+                    <ul>
+                        <li><a href="createproduct.php">Add Product</a></li>
+                        <li><a href="mngproduct.php">Manage Products</a></li> <!-- Add class "current" to sub menu items also -->
+                        
+                    </ul>
+
+                <?php endif;?>
+
+                <?php if($page=='createproduct.php'):?>
+                    <a href="#" class="nav-top-item current"> <!-- Add the class "current" to current menu item -->
+                    Products
+                    </a>
+                    <ul>
+                        <li><a class="current" href="createproduct.php">Add Product</a></li>
+                        <li><a href="mngproduct.php">Manage Products</a></li> <!-- Add class "current" to sub menu items also -->
+                        
+                    </ul>
+
+                <?php endif;?>
+
+                <?php if($page=='mngproduct.php'):?>
+                    <a href="#" class="nav-top-item current"> <!-- Add the class "current" to current menu item -->
+                    Products
+                    </a>
+                    <ul>
+                        <li><a href="createproduct.php">Add Product</a></li>
+                        <li><a class="current" href="mngproduct.php">Manage Products</a></li> <!-- Add class "current" to sub menu items also -->
+                        
+                    </ul>
+
+                <?php endif;?>
+
+
+                </li>
+				
+
 				<li>
 					<?php if($page=="index.php"||$page="createproduct.php" ||$page="mngproduct.php"	):?>
 
@@ -47,6 +76,7 @@
 					</ul>
 				<?php endif ?>
 				</li>
+				
 				 
 				
 				

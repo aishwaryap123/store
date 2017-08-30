@@ -5,24 +5,7 @@
 //to select different categories from database
 	$ctg=showCategory();
 	$products=showProduct();
-	/*$ctg=array();
-			$stmt=$conn->prepare("SELECT cat_name FROM Category");
-			$stmt->bind_result($c_name);
-			$stmt->execute();
-			while($stmt->fetch()){
-				array_push($ctg,array('name'=>$c_name));
-			}
-			$stmt->close();
-			*/
-			//to show product of selected category...
-			/*
-			$products=array();
-			$stmt= $conn->prepare("SELECT * FROM PRODUCT");
-			$stmt->execute();
-				$stmt->bind_result($r_id,$r_name,$r_price,$r_image,$r_cat,$r_tag);
-					while($stmt->fetch()){
-						array_push($products,array('id'=>$r_id,'name'=>$r_name,'price'=>$r_price,'image'=>$r_image,'category'=>$r_cat,'tags'=>$r_tag));
-					}*/
+	
 
 ?>
 

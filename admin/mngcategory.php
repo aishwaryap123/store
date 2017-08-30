@@ -1,18 +1,14 @@
-<?php include('header.php'); ?>
+<?php include('header.php'); 
+include "../config.php";
+include "../functions.php";
+?>
 	<?php $page=basename($_SERVER['PHP_SELF']); ?>
 		<?php include('sidebar.php'); ?>
 		<?php 
-			include "config.php";
+			
 			//to show categories.....
-			$ctg=array();
-			$stmt=$conn->prepare("SELECT * FROM Category");
-			$stmt->bind_result($c_id,$c_name,$c_parent);
-			$stmt->execute();
-	                    while($stmt->fetch()){
-						array_push($ctg,array('id'=>$c_id,'name'=>$c_name,'p_id'=>$c_parent));
-								
-							}
-			$stmt->close();	
+			$ctg=showCategory();
+			
 		?>
 
 		<div id="main-content"> <!-- Main Content Section with everything -->

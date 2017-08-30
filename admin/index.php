@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <?php include('header.php'); ?>
 <?php 
 			$page=basename($_SERVER['PHP_SELF']);

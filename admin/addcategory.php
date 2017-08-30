@@ -1,36 +1,28 @@
 <?php include('header.php'); ?>
+	<?php include "../config.php" ?>
+<?php include "../functions.php"; ?>
 	<?php $page=basename($_SERVER['PHP_SELF']); ?>
 		<?php include('sidebar.php'); ?>
-		<?php include "config.php" ?>
+	
 		<?php 
-			$category=array();
-			$bind_id=0;
-			$stmt=$conn->prepare("SELECT * FROM Category WHERE parent_id=?");
-			$stmt->bind_param("i",$bind_id);
-			$stmt->bind_result($cat_id,$cat_name,$parent_id);
-			$stmt->execute();
-			                    while($stmt->fetch()){
-								array_push($category,array('id'=>$cat_id,'name'=>$cat_name,'p_id'=>$parent_id));
-										
-									}
-			$stmt->close();	
-			//to fetch parent id
-			$pid=0;
-			if(isset($_POST['dropdown'])){
-				$parent_name=$_POST['dropdown'];
-				foreach($category as $x=>$y){
-					if($y['name']==$parent_name){
-						$pid=$y['id'];
+					
+					
+			$category=showCategory();
+				//to fetch parent id......
+				$pid=0;
+				if(isset($_POST['dropdown'])){
+					$parent_name=$_POST['dropdown'];
+						foreach($category as $x=>$y){
+							if($y['name']==$parent_name){
+								$pid=$y['id'];
 					}
 				}
 
 			}
 			if(isset($_POST['submit'])){
 				$catname=isset($_POST['cat-name'])?$_POST['cat-name']:"";
-				$stmt=$conn->prepare("INSERT INTO Category(cat_name,parent_id) VALUES(?,?)");
-				$stmt->bind_param('si',$catname,$pid);
-				$stmt->execute();
-				$stmt->close();
+				addCategory();
+				
 				//header("location:mngcategory.php");
 			}		
 
