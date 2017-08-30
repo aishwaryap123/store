@@ -65,6 +65,9 @@ function addProduct($product){
 		function showMultipleCategory($check_array){
 				global $conn;
 					$cat_products=array();
+					/*
+					$sql="SELECT * FROM PRODUCT WHERE ";
+					*/
 
                     foreach($check_array as $key){
                  
@@ -77,9 +80,10 @@ function addProduct($product){
                     while($stmt->fetch()){
                       array_push($cat_products,array('id'=>$ro_id,'name'=>$ro_name,'price'=>$ro_price,'image'=>$ro_image,'category'=>$ro_cat,'tags'=>$ro_tag));
                     }
+                }
                     return $cat_products;
 
-		}
+		
 	}
 			function showPagination($offset,$rec_limit){
 				global $conn;

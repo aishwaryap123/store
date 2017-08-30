@@ -6,7 +6,7 @@
   <?php include ("menu.php");?>
   <?php 
    
-    $rec_limit=9;
+    $rec_limit=6;
     //count total # of products
       $total_record=countProduct();
          $offset=0;
@@ -22,19 +22,50 @@
                     
                    }
                  }
+
                }
+               
+               
                 //to show multiple category wise.......
                   if(isset($_POST['submit'])){
 
-                    if(!empty($_POST['param'])){
+                    if(isset($_POST['param'])){
                       $check_array=$_POST['param'];
+                     // print_r($check_array);
+                      
 
                         $cat_products=showMultipleCategory($check_array);
-                         array_slice($cat_products,$offset,$rec_limit);
+                        $cnt=count($cat_products);
+                        $product_per_page=ceil($cnt/$rec_limit);
+                         $cat_products= array_slice($cat_products,$offset,$rec_limit);
+                       
+                        
                        }
                      }
+                     else if (isset($_GET['cat'])){
+                     $arr=$_GET['cat'];
+                     $cat=array();
+                     $cat_products=showMultipleCategory($arr);
+                     $cnt=count($cat_products);
+                     $product_per_page=ceil($cnt/$rec_limit);
+                    for($i=0;$i<sizeof($cat_products);$i++){
+                  if($cat_products[$i]['category']!=$cat_products[$i+1]['category']){
+                    $cat[]=$cat_products[$i]['category'];
+                    $cat[]=$cat_products[$i+1]['category'];
+                    break;
+                  }
+                
+                 }
+          
+                $cat_products= array_slice($cat_products,$offset,$rec_limit);
+                       // print_r($cat_products);
+                 //to show all products with pagination.....
+                  //$products=showPagination($offset,$rec_limit);
+
+               }else{
                      //to show all products with pagination.....
                         $products=showPagination($offset,$rec_limit);
+                      }
                         //to select all category....
                            $ctg=array();
                               $ctg=showCategory();
@@ -91,7 +122,7 @@
             <div class="aa-product-catg-body">
               <ul class="aa-product-catg">
                 <!-- start single product item -->
-               <?php if(!isset($_POST['submit'])){ ?>
+               <?php if(!isset($_POST['param']) && !isset($_GET['cat'])){ ?>
               <?php  foreach($products as $key=>$value):?>
 
                 <li>
@@ -241,13 +272,35 @@
             <div class="aa-product-catg-pagination">
               <nav>
                 <ul class="pagination">
-               
-                 <?php for($i=1;$i<=$product_per_page;$i++):?>  
-                  <li><a href="product.php?pg=<?php echo $i;?>"><?php echo $i;?></a></li>
-                  <?php endfor;?>
+                <?php
+                $check_str="";
+                if(isset($check_array)){
+                foreach($check_array as $cat){
+                  $check_str.="&cat[]=".$cat;
+                } 
+              }
+              else if(isset($cat)){
+                 $check_str="";
+                foreach($cat as $cat){
+                  $check_str.="&cat[]=".$cat;
+                } 
+
+              }
+                ?>
+
+             
+              
+                 
+              
+                 <?php for($i=1;$i<=$product_per_page;$i++): ?>  
+                  <li><a href='product.php?pg=<?php echo $i?><?php echo $check_str;?>'><?php echo $i?></a></li>
+                  <?php endfor; ?>
                   
-                  
-                </ul>
+                
+                   </ul>
+                   <?php
+                
+               ?>
               </nav>
             </div>
           </div>
