@@ -53,7 +53,7 @@
 				$sql.=", image=? WHERE id=?";
 			
 			$stmt = $conn->prepare($sql);
-				$stmt->bind_param("sssi", $postName,$postPrice,$postImage,$postId);
+				$stmt->bind_param("sisi", $postName,$postPrice,$postImage,$postId);
 					$stmt->execute();
 						$stmt->close();
 							//header("location:dlt.php");
@@ -61,7 +61,7 @@
 		else{
 			$sql="WHERE id=?";
 				$stmt = $conn->prepare($sql);
-					$stmt->bind_param("ssi", $postName,$postPrice,$postId);
+					$stmt->bind_param("sii", $postName,$postPrice,$postId);
 						$stmt->execute();
 						$stmt->close();
 

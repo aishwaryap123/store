@@ -27,49 +27,91 @@
                
                
                 //to show multiple category wise.......
-                  if(isset($_POST['submit'])){
+                  $min="";
+                  $max="";
+                    if(isset($_POST['submit'])){
+                    $min=isset($_POST['minprice'])?$_POST['minprice']:20;
+                    $max=isset($_POST['maxprice'])?$_POST['maxprice']:100;
+                     echo $min;
+                  
 
-                    if(isset($_POST['param'])){
+
+              if(isset($_POST['param']) && isset($_POST['minprice']) && isset($_POST['maxprice'])){
+                     
+
                       $check_array=$_POST['param'];
                      // print_r($check_array);
-                      
 
-                        $cat_products=showMultipleCategory($check_array);
-                        $cnt=count($cat_products);
-                        $product_per_page=ceil($cnt/$rec_limit);
-                         $cat_products= array_slice($cat_products,$offset,$rec_limit);
+                      
+                         $cnt=countMultiple($check_array,$min,$max);
+                         //echo $cnt;
+                          $product_per_page=ceil($cnt/$rec_limit);
+
+
+
+                         
+                        $cat_products=showMultipleCategory($check_array,$offset,$rec_limit,$min,$max);
+                         }
+                         else if(isset($_POST['minprice'])){
+                         $check_array=array();
+                         $cnt=countMultiple($check_array,$min,$max);
+                         $cat_products=showMultipleCategory($check_array,$offset,$rec_limit,$min,$max);
+                                $product_per_page=ceil($cnt/$rec_limit);
+                           }
+
+                         }
+                      
+                          else if (isset($_GET['cat'])||isset($_get['min'])){
+                           $arr=isset($_GET['cat'])?$_GET['cat']:array();
+                             $cat=array();
+                             $min=$_GET['min'];
+                             $max=$_GET['max'];
+                              if(!empty($arr)){
+                                $cnt=countMultiple($arr,$min,$max);
+
+                                  $cat=$arr;
+                           }
+                            else{
+                            $cnt=countMultiple($arr,$min,$max);
+                          }
+                            $product_per_page=ceil($cnt/$rec_limit);
+                              for ($i=1; $i <= $product_per_page ; $i++) {
+
+                                if($pg==$i){
+
+                                 $offset= ($i-1)*$rec_limit;
+                    
+                              }
+                            }
+                             $cat_products=showMultipleCategory($arr,$offset,$rec_limit,$min,$max);
+                     
+                            //  $product_per_page=ceil($cnt/$rec_limit);
+                             
+                     
+                
+
+                          }
+                          
+                          else{
+                            //to show all products with pagination.....
+                            $products=showPagination($offset,$rec_limit);
+                          }
+                            //to select all category....
+                            $ctg=array();
+                                $ctg=showCategory();
+  ?>
+                       
+                       
+                       
                        
                         
-                       }
-                     }
-                     else if (isset($_GET['cat'])){
-                     $arr=$_GET['cat'];
-                     $cat=array();
-                     $cat_products=showMultipleCategory($arr);
-                     $cnt=count($cat_products);
-                     $product_per_page=ceil($cnt/$rec_limit);
-                    for($i=0;$i<sizeof($cat_products);$i++){
-                  if($cat_products[$i]['category']!=$cat_products[$i+1]['category']){
-                    $cat[]=$cat_products[$i]['category'];
-                    $cat[]=$cat_products[$i+1]['category'];
-                    break;
-                  }
-                
-                 }
-          
-                $cat_products= array_slice($cat_products,$offset,$rec_limit);
-                       // print_r($cat_products);
-                 //to show all products with pagination.....
-                  //$products=showPagination($offset,$rec_limit);
+                       
+                    
+                     
+                        
 
-               }else{
-                     //to show all products with pagination.....
-                        $products=showPagination($offset,$rec_limit);
-                      }
-                        //to select all category....
-                           $ctg=array();
-                              $ctg=showCategory();
-  ?>
+
+                    
   
   <!-- catg header banner section -->
   <section id="aa-catg-head-banner">
@@ -121,8 +163,8 @@
             </div>
             <div class="aa-product-catg-body">
               <ul class="aa-product-catg">
-                <!-- start single product item -->
-               <?php if(!isset($_POST['param']) && !isset($_GET['cat'])){ ?>
+              <!-- start single product item -->
+               <?php if(!isset($_POST['submit']) && !isset($_GET['cat'])){ ?>
               <?php  foreach($products as $key=>$value):?>
 
                 <li>
@@ -293,7 +335,7 @@
                  
               
                  <?php for($i=1;$i<=$product_per_page;$i++): ?>  
-                  <li><a href='product.php?pg=<?php echo $i?><?php echo $check_str;?>'><?php echo $i?></a></li>
+                  <li><a href='product.php?pg=<?php echo $i?><?php echo $check_str;?><?php echo "&min=$min&max=$max"?>'><?php echo $i?></a></li>
                   <?php endfor; ?>
                   
                 
@@ -321,10 +363,10 @@
               <?php endforeach;
                  
               ?>
-             <button class="aa-filter-btn" value="submit" name="submit" type="submit">Filter</button>
+            <!-- <button class="aa-filter-btn" value="submit" name="submit" type="submit">Filter</button> !-->
               </ul>
             </div>
-            </form>
+            
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
               <h3>Tags</h3>
@@ -343,12 +385,14 @@
               <h3>Shop By Price</h3>              
               <!-- price range -->
               <div class="aa-sidebar-price-range">
-               <form action="">
+               
                   <div id="skipstep" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
                   </div>
                   <span id="skip-value-lower" class="example-val">30.00</span>
+                  <input  type="hidden" id="skip-value-lower1" value="" name="minprice" class="example-val">
                  <span id="skip-value-upper" class="example-val">100.00</span>
-                 <button class="aa-filter-btn" type="submit">Filter</button>
+                 <input type="hidden" id="skip-value-upper1" class="example-val" value="" name="maxprice">
+                 <button class="aa-filter-btn" name="submit" type="submit">Filter</button>
                </form>
               </div>              
 

@@ -10,7 +10,7 @@ function addProduct($product){
 	$ctg=isset($product['category'])?$product['category']:"";
 	$tg=isset($product['tag'])?$product['tag']:"";
 	$stmt=$conn->prepare("INSERT INTO PRODUCT (name,price,image,category,tags) values (?,?,?,?,?)");
-				$stmt->bind_param("sssss",$nme,$prc,$img,$ctg,$tg);
+				$stmt->bind_param("sisss",$nme,$prc,$img,$ctg,$tg);
 				$execute=$stmt->execute();
 				if(false===$execute){
 					return false;
@@ -62,29 +62,105 @@ function addProduct($product){
         }
            	return $total_record;
 		}
-		function showMultipleCategory($check_array){
+		function countMultiple($check_array,$min,$max){
 				global $conn;
-					$cat_products=array();
-					/*
-					$sql="SELECT * FROM PRODUCT WHERE ";
-					*/
+				$query1=array();
+				
+				$s="SELECT count(id) FROM PRODUCT ";
+				if(!empty($check_array)){
+				$sql_cat="WHERE category IN (";
+					 foreach ($check_array as $value) {
 
-                    foreach($check_array as $key){
-                 
-                    $stmt=$conn->prepare("SELECT * FROM PRODUCT WHERE category=?");
-                    $stmt->bind_param("s",$key);
-                    $stmt->execute();
-                     $stmt->bind_result($ro_id,$ro_name,$ro_price,$ro_image,$ro_cat,$ro_tag);
+
+        				$query1[]= "'$value'";
+
+   					 }
+   					  $query2= implode(',',$query1);
+   					   $sql_cat.= $query2.") ";
+   					     $s.=$sql_cat;
+   					     
+
+
+		}
+		else{
+			$sql_price="WHERE price>=$min AND price<=$max";
+			$s.=$sql_price;
+		}
+		 $stmt=$conn->prepare($s);
+
+                   		 $stmt->bind_result($count_multiple);
+                   		 $stmt->execute();
+                   		 while($stmt->fetch()){
+                    	$c_multiple=$count_multiple;
+                    }
+					return $c_multiple;
+	}
+		
+		function showMultipleCategory($check_array,$offset,$rec_limit,$min,$max){
+				global $conn;
+				$cat_products=array();
+			
+
+					/////////
+					
+					$query1=array();
+					$sql="SELECT * FROM PRODUCT WHERE price>=$min AND price<=$max";
+
+					
+
+					if(!empty($check_array)){
+					$sql_cat=" AND category IN (";
+					 foreach ($check_array as $value) {
+
+
+        				$query1[]= "'$value'";
+        			}
+
+					    $query2= implode(',',$query1);
+					    $sql_cat.= $query2.")";
+					    $sql.=$sql_cat;
+					}
+					
+					$sql.=" LIMIT ?,? ";
+
+					
+					
+
+				    $stmt = $conn->prepare($sql);
+				    $stmt->bind_param("ii", $offset,$rec_limit);
+				    $stmt->execute();
+                    $stmt->bind_result($ro_id,$ro_name,$ro_price,$ro_image,$ro_cat,$ro_tag);
                     
                    
                     while($stmt->fetch()){
                       array_push($cat_products,array('id'=>$ro_id,'name'=>$ro_name,'price'=>$ro_price,'image'=>$ro_image,'category'=>$ro_cat,'tags'=>$ro_tag));
                     }
-                }
-                    return $cat_products;
+                    $stmt->close();
+                       return $cat_products;
+                   }
+        				
+                    
+                
+
+    
+
+  
+   
+                   
+                   
+                   
+                    ///////to count multiple......
+                       
+                   
+                    
+
+   
+					
+					
+                 
 
 		
-	}
+	
 			function showPagination($offset,$rec_limit){
 				global $conn;
 				$products=array();
