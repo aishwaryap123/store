@@ -1,9 +1,12 @@
+
   
-  <?php include ("productheader.php"); ?>
   <?php include ("../config.php"); ?> 
   <?php include ("../functions.php");?>
+    <?php $page=basename($_SERVER['PHP_SELF']); ?>
+  <?php include ("header.php"); ?>
+
   <!-- menu -->
-  <?php include ("menu.php");?>
+  <?php //include ("menu.php");?>
   <?php 
    
     $rec_limit=6;
@@ -171,7 +174,7 @@
                   <figure>
                     <a class="aa-product-img" href="#"><img src="../uploads/<?php 
                     echo $value['image'];?>" alt="polo shirt img"></a>
-                    <a class="aa-add-card-btn"href="#"><?php 
+                    <a class="aa-add-card-btn" href="addtocart.php?id=<?php echo $value['id'];?>"><?php 
                     echo $value['name'];?><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                     <figcaption>
                       <h4 class="aa-product-title"><a href="#"><?php 
