@@ -1,3 +1,4 @@
+<?php session_start();?>
 <?php $page=basename($_SERVER['PHP_SELF']); ?>
 <?php include("header.php"); ?>
 
@@ -48,22 +49,26 @@
                     
                     <tbody>
                     
-                     <?php  $cart=$_SESSION['cart'];
+                     <?php if(isset($_SESSION['cart'])){
+                      $cart=$_SESSION['cart'];
                           foreach($cart as $key=>$value){
                             foreach ($value as $x => $y) {?>  
                       <tr>
                         <td><a class="remove" href="addtocart.php?d_id=<?php echo $y['id']?>&pg=<?php echo $page;?>"><fa class="fa fa-close"></fa></a></td>
                         <td><a href="#"><img src="../uploads/<?php 
-                    echo $cart[$key][$x]['image'];?>" alt="img"></a></td>
+                        echo $cart[$key][$x]['image'];?>" alt="img"></a></td>
                         <td><a class="aa-cart-title" href="#"><?php echo $cart[$key][$x]['name']; ?></a></td>
                         <td><?php echo $cart[$key][$x]['price']; ?></td>
                         <td><input class="aa-cart-quantity" name="qty[]"
                          type="number" value="<?php echo $cart[$key][$x]['quant']; ?>">
-                         <input type="text" name="hid[]" value="<?php echo $cart[$key][$x]['id'];?>"</td>
+                         <input type="hidden" name="hid[]" value="<?php echo $cart[$key][$x]['id'];?>"</td>
                         <td><?php echo ($cart[$key][$x]['quant']*$cart[$key][$x]['price']); ?></td>
                       </tr>
-                      <?php }
-                      }?>
+                      <?php 
+                    }
+                  }
+                }
+                ?>
                       
                       <tr>
                         <td colspan="6" class="aa-cart-view-bottom">
@@ -84,11 +89,17 @@
                    
                    <tr>
                      <th>Total</th>
-                     <td><?php echo $_SESSION['total_price']; ?></td>
+                     <td><?php if(isset($_SESSION['cart'])){ echo $_SESSION['total_price']; }else{ ?></td>
+                     <td>0</td>
+                     <?php } ?>
                    </tr>
                  </tbody>
                </table>
+               <?php if(isset($_SESSION['role'])){?>
                <a href="checkout.php" class="aa-cart-view-btn">Proced to Checkout</a>
+             <?php } else{?>
+              <a href="account.php" class="aa-cart-view-btn">Proced to Checkout</a>
+              <?php }?>
              </div>
            </div>
          </div>

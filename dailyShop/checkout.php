@@ -1,4 +1,15 @@
+<?php session_start(); ?>
+
+<?php include "../config.php";?>
+<?php include "../functions.php"; ?>
 <?php include "header.php"; ?>
+<?php if(isset($_SESSION['role'])){ 
+         $exe=placeOrder();
+         if($exe){
+          echo "order placed";
+         }
+    }
+  ?>
   <!-- / menu -->  
  
   <!-- catg header banner section -->
@@ -293,18 +304,18 @@
                       isset($_SESSION['total_price'])?$price=$_SESSION['total_price']:$price=0;
                       isset($price)?$tax=($price*8)/100:$tax=0;
                       ?>
+                       <?php foreach($cart as $key=>$value){
+                                foreach ($value as $x => $y) { ?>
                         <tr>
-                        <?php foreach($cart as $key=>$value){
-                                foreach ($value as $x => $y) {
-                                  # code...
                                 
-                          ?>
+                        
                           <td><?php echo $cart[$key][$x]['name']; ?><strong> x<?php echo $cart[$key][$x]['quant']; ?> </strong></td>
                           <td><?php echo $cart[$key][$x]['price']; ?></td>
-                          <?php }
+                         
+                        </tr>
+                         <?php }
                               }
                           ?>
-                        </tr>
                        
                       </tbody>
                       <tfoot>

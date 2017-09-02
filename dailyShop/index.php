@@ -1,4 +1,4 @@
-
+<?php session_start(); ?>
 <?php include ("../config.php");?>
 <?php include "../functions.php"; ?>
 <?php $page=basename($_SERVER['PHP_SELF']); ?>

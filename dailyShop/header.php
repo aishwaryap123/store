@@ -1,6 +1,6 @@
-<?php session_start(); 
 
-?> 
+
+ 
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -108,8 +108,16 @@
                   <li><a href="account.php">My Account</a></li>
                   <li class="hidden-xs"><a href="wishlist.html">Wishlist</a></li>
                   <li class="hidden-xs"><a href="cart.php">My Cart</a></li>
+                  <?php if(isset($_SESSION['role'])){ ?>
                   <li class="hidden-xs"><a href="checkout.php">Checkout</a></li>
-                  <li><a href="" data-toggle="modal" data-target="#login-modal">Login</a></li>
+                  <?php } else{?>
+                  <li class="hidden-xs"><a href="account.php">Checkout</a></li>
+                  <?php }?>
+                  <?php if(isset($_SESSION['role'])){ ?>
+                  <li><a href="account.php?logout=<?php echo $_SESSION['role']; ?>" >Logout</a></li>
+                  <?php } else{?>
+                   <li><a href="account.php">Login</a></li>
+                   <?php } ?>
                 </ul>
               </div>
             </div>
@@ -176,7 +184,11 @@
                       </span>
                     </li>
                   </ul>
-                  <a class="aa-cartbox-checkout aa-primary-btn" href="checkout.html">Checkout</a>
+                  <?php if(isset($_SESSION['role'])){?>
+                  <a class="aa-cartbox-checkout aa-primary-btn" href="checkout.php">Checkout</a>
+                  <?php } else {?>
+                    <a class="aa-cartbox-checkout aa-primary-btn" href="account.php">Checkout</a>
+                    <?php } ?>
                 </div>
               </div>
               <!-- / cart box -->
@@ -213,7 +225,7 @@
           <div class="navbar-collapse collapse">
             <!-- Left nav -->
             <ul class="nav navbar-nav">
-              <li><a href="index.html">Home</a></li>
+              <li><a href="index.php">Home</a></li>
               <li><a href="#">Men <span class="caret"></span></a>
                 <ul class="dropdown-menu">                
                   <li><a href="#">Casual</a></li>

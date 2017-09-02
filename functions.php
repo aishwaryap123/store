@@ -193,12 +193,65 @@ function addProduct($product){
        				}
 				}
 
+			function isUserExist($name,$password){
+				global $conn;
+			$role="user";
+			$stmt=$conn->prepare("SELECT count(id) FROM login WHERE name=? AND password=?");
+			$stmt->bind_param("ss",$name,$password);
+			$stmt->bind_result($cnt);
+			$stmt->execute();
+			while ($stmt->fetch()){
+				$count=$cnt;
+			}
+			$stmt->close();
+			if($count==0){
+				return false;
+			}
+			else {
+				return true;
+			}
+
+
+		}
+		function addUser($name,$password){
+			global $conn;
+			$role="user";
+			
+			
+				$stmt=$conn->prepare("INSERT INTO login (name,password,role) VALUES (?,?,?)");
+				$stmt->bind_param("sss",$name,$password,$role);
+				$st=$stmt->execute();
+				if($st===false){
+					return false;
+				}else{
+					return true;
+				}
+			
+		}
+		function placeOrder(){
+			global $conn;
+			if (isset($_SESSION['cart'])) {
+				isset($_SESSION['role'])?$name=$_SESSION['role']:$name="";
+				$date=date('Y/m/d H:i:s');
+				$obj=json_encode($_SESSION['cart']);
+				$price=$_SESSION['total_price'];
+
+				$stmt=$conn->prepare("INSERT INTO placeorder
+				(o_user,o_data,o_date,o_price) VALUES(?,?,?,?)");
+				$stmt->bind_param("sssi",$name,$obj,$date,$price);
+				$exe=$stmt->execute();
+				return $exe;
+			}
+			
+		
+	
+
 
 				
 					
 				
 		
-				
+			}	
 			function getProduct($id){
 				global $conn;
 				$cart=array();
